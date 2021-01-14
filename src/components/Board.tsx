@@ -1,16 +1,37 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Tile, { TileColor } from "./Tile";
 import "./Board.scss";
 import Board from "../logic/Board";
 import { _Piece } from "../logic/Piece";
+import MousePosition from "../util/MousePosition";
 
 interface Props {
     board: Board;
 }
 
 const BoardComponent: React.FC<Props> = ({ board }) => {
+    const [mousePosition, setMousePosition] = useState<MousePosition>({
+        x: null,
+        y: null,
+    });
+
+    const boardRef = useRef<HTMLDivElement>();
+
+    const updateMousePosition = (event: MouseEvent) => {
+        const bounds = boardRef.current?.getBoundingClientRect();
+
+        const x = event.clientX - bounds!.left;
+        const y = event.clientY - bounds!.top;
+
+        setMousePosition({ x, y });
+    };
+
     return (
-        <div className="Board">
+        <div
+            className="Board"
+            onMouseMove={updateMousePosition as any}
+            ref={boardRef as any}
+        >
             {board.pieces.map((_, y) => {
                 return (
                     <div className="row" key={y}>
@@ -20,7 +41,14 @@ const BoardComponent: React.FC<Props> = ({ board }) => {
                                     ? TileColor.Light
                                     : TileColor.Dark;
 
-                            return <Tile color={color} piece={piece} key={x} />;
+                            return (
+                                <Tile
+                                    color={color}
+                                    piece={piece}
+                                    key={x}
+                                    mouse={mousePosition}
+                                />
+                            );
                         })}
                     </div>
                 );
