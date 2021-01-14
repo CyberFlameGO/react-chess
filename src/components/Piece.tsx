@@ -6,15 +6,16 @@ interface Props {
 }
 
 const PieceComponent: React.FC<Props> = ({ piece }) => {
-    const image = `assets/${piece.alliance}-${piece.name}.png`;
+    const imagePath = `assets/${piece.alliance}-${piece.name}.png`;
+
     return (
         <div
             className="Piece"
             style={{
-                ["--image" as any]: `url(${image})`,
+                ["--image" as any]: `url(${imagePath})`,
             }}
         >
-            <img src={image} alt={piece.name} />
+            <img src={imagePath} alt={piece.name} />
         </div>
     );
 };
