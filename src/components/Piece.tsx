@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Piece from "../logic/Piece";
 import MousePosition from "../util/MousePosition";
 
@@ -10,29 +10,55 @@ interface Props {
 const setProp = (obj: any, key: string, value: any) => (obj[key] = value);
 
 const PieceComponent: React.FC<Props> = ({ piece, mouse }) => {
-    const size = 100;
+    const tileSize = 100;
     const imagePath = `assets/${piece.alliance}-${piece.name}.png`;
     const [active, setActive] = useState(false);
+    const [move, setMove] = useState(false);
+    const [display, setDisplay] = useState("block");
 
     const styles = {
         "--image": `url(${imagePath})`,
+        display,
     };
 
     const activate = () => {
         setActive(true);
-        window.addEventListener("mouseup", () => setActive(false));
+
+        const onMouseUp = () => {
+            setActive(false);
+            setMove(true);
+            setDisplay("none");
+            window.removeEventListener("mouseup", onMouseUp);
+        };
+
+        window.addEventListener("mouseup", onMouseUp);
     };
+
+    useEffect(() => {
+        if (move) {
+            const x = Math.round((mouse.x! - tileSize / 2) / tileSize);
+            const y = Math.round((mouse.y! - tileSize / 2) / tileSize);
+
+            if (piece.x === x && piece.y === y) {
+                setDisplay("block");
+            }
+
+            piece.move(x, y);
+            setMove(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [move]);
 
     if (active) {
         setProp(styles, "position", "absolute");
-        setProp(styles, "top", 0);
-        setProp(styles, "left", 0);
         setProp(
             styles,
             "transform",
-            `translate(${mouse.x! - size / 2}px, ${mouse.y! - size / 2}px)`
+            `translate(${mouse.x! - tileSize / 2}px, ${
+                mouse.y! - tileSize / 2
+            }px)`
         );
-    } else {
+    } else if (!move) {
         setProp(styles, "position", "static");
     }
 

@@ -26,6 +26,8 @@
             }
 
             .Piece {
+                top: 0;
+                left: 0;
                 width: $tileSize;
                 height: $tileSize;
 
@@ -33,20 +35,6 @@
                     width: 100%;
                     height: 100%;
                 }
-
-                // &::after {
-                //     content: "";
-                //     position: absolute;
-                //     top: 0;
-                //     left: 0;
-                //     visibility: var(--after-visibility);
-                //     background-image: var(--image);
-                //     background-position: 0 0;
-                //     background-size: $tileSize $tileSize;
-                //     width: $tileSize;
-                //     height: $tileSize;
-                //     z-index: 10;
-                // }
             }
         }
     }

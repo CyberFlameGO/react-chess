@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Tile, { TileColor } from "./Tile";
 import "./Board.scss";
 import Board from "../logic/Board";
@@ -26,12 +26,12 @@ const BoardComponent: React.FC<Props> = ({ board }) => {
         setMousePosition({ x, y });
     };
 
+    useEffect(() => {
+        window.addEventListener("mousemove", updateMousePosition);
+    }, []);
+
     return (
-        <div
-            className="Board"
-            onMouseMove={updateMousePosition as any}
-            ref={boardRef as any}
-        >
+        <div className="Board" ref={boardRef as any}>
             {board.pieces.map((_, y) => {
                 return (
                     <div className="row" key={y}>
