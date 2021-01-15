@@ -14,8 +14,14 @@ const BoardComponent: React.FC<Props> = ({ board }) => {
         x: null,
         y: null,
     });
-
+    const [, setUpdate] = useState(0);
     const boardRef = useRef<HTMLDivElement>();
+
+    const reRender = () => {
+        setUpdate((x: number) => x + 1);
+    };
+
+    (window as any).reRender = reRender;
 
     const updateMousePosition = (event: MouseEvent) => {
         const bounds = boardRef.current?.getBoundingClientRect();

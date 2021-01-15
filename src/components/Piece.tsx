@@ -14,11 +14,9 @@ const PieceComponent: React.FC<Props> = ({ piece, mouse }) => {
     const imagePath = `assets/${piece.alliance}-${piece.name}.png`;
     const [active, setActive] = useState(false);
     const [move, setMove] = useState(false);
-    const [display, setDisplay] = useState("block");
 
     const styles = {
         "--image": `url(${imagePath})`,
-        display,
     };
 
     const activate = () => {
@@ -27,7 +25,6 @@ const PieceComponent: React.FC<Props> = ({ piece, mouse }) => {
         const onMouseUp = () => {
             setActive(false);
             setMove(true);
-            setDisplay("none");
             window.removeEventListener("mouseup", onMouseUp);
         };
 
@@ -39,11 +36,9 @@ const PieceComponent: React.FC<Props> = ({ piece, mouse }) => {
             const x = Math.round((mouse.x! - tileSize / 2) / tileSize);
             const y = Math.round((mouse.y! - tileSize / 2) / tileSize);
 
-            if (piece.x === x && piece.y === y) {
-                setDisplay("block");
-            }
-
             piece.move(x, y);
+            (window as any).reRender();
+
             setMove(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
